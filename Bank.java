@@ -271,7 +271,7 @@ public class Bank {
     dataNasabah[indexRekeningTujuan][1] += nominalTransfer;
 
     tambahkanTransaksi(indexRekeningAsal, "Transfer ke " + rekeningTujuan + " -Rp. " + nominalTransfer);
-    tambahkanTransaksi(indexRekeningTujuan, "Transfer dari " + rekeningTujuan + " +Rp. " + nominalTransfer);
+    tambahkanTransaksi(indexRekeningTujuan, "Transfer dari " + rekeningAsal + " +Rp. " + nominalTransfer);
 
     System.out.println("\n===== Bukti Transfer =====");
     System.out.printf("Nomor rekening asal\t: %d (%s)\n", rekeningAsal, namaNasabah[indexRekeningAsal]);
