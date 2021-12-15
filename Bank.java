@@ -11,10 +11,15 @@ public class Bank {
 
   static String[][] dataTransaksi = new String[dataLength][dataLength];
 
-  static int[] limitTransfer = {
-      5000000,
-      20000000
+  static String[] jenisTabungan = {
+      "Tabungan Kimchi (tf limit Rp. 5.000.000)",
+      "Tabungan Kimbab (tf limit Rp. 20.000.000)"
   };
+
+  static int[] limitTransfer = {
+    5000000,
+    20000000
+};
 
   static int indexNasabahTerakhir() {
     for (int i = 0; i < dataNasabah.length; i++) {
@@ -24,14 +29,6 @@ public class Bank {
     }
 
     return -1;
-  }
-
-  static String teksJenisTabungan(int jenisTabungan) {
-    return switch (jenisTabungan) {
-      case 0 -> "Tabungan Kimchi (tf limit Rp. 5.000.000)";
-      case 1 -> "Tabungan Kimbab (tf limit Rp. 20.000.000)";
-      default -> "Tabungan Lainnya";
-    };
   }
 
   static void clearConsole() {
@@ -138,7 +135,7 @@ public class Bank {
       System.out
           .println("Jenis kelamin nasabah\t: " + (genderNasabah[indexNasabah] == 'l' ? "Laki-laki" : "Perempuan"));
       System.out.println("Saldo nasabah\t\t: Rp. " + dataNasabah[indexNasabah][1]);
-      System.out.println("Jenis tabungan\t\t: " + teksJenisTabungan(dataNasabah[indexNasabah][2]));
+      System.out.println("Jenis tabungan\t\t: " + jenisTabungan[dataNasabah[indexNasabah][2]]);
       System.out.println("==================================");
     }
 
@@ -258,7 +255,7 @@ public class Bank {
       return false;
     }
 
-    if(nominalTransfer > limitTransfer[dataNasabah[indexRekeningTujuan][2]]) {
+    if (nominalTransfer > limitTransfer[dataNasabah[indexRekeningTujuan][2]]) {
       System.out.println("Nominal transfer melebihi limit transfer");
 
       enterUntukMelanjutkan();
@@ -306,7 +303,7 @@ public class Bank {
     System.out
         .println("Jenis kelamin nasabah\t: " + (genderNasabah[indexNasabah] == 'l' ? "Laki-laki" : "Perempuan"));
     System.out.println("Saldo nasabah\t\t: Rp. " + dataNasabah[indexNasabah][1]);
-    System.out.println("Jenis tabungan\t\t: " + teksJenisTabungan(dataNasabah[indexNasabah][2]));
+    System.out.println("Jenis tabungan\t\t: " + jenisTabungan[dataNasabah[indexNasabah][2]]);
     System.out.println("==================================\n");
 
     for (int i = dataTransaksi[indexNasabah].length - 1; i >= 0; i--) {
