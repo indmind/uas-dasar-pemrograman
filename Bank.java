@@ -142,8 +142,7 @@ public class Bank {
       System.out.println("==================================");
     }
 
-    System.out.println("Tekan enter untuk melanjutkan...");
-    input.nextLine();
+    enterUntukMelanjutkan();
   }
 
   static boolean pilihJenisTabungan() {
