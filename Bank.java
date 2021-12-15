@@ -17,9 +17,9 @@ public class Bank {
   };
 
   static int[] limitTransfer = {
-    5000000,
-    20000000
-};
+      5000000,
+      20000000
+  };
 
   static int indexNasabahTerakhir() {
     for (int i = 0; i < dataNasabah.length; i++) {
@@ -73,7 +73,7 @@ public class Bank {
     sudahAda = cariDataNasabah(nomorRekening) != -1;
 
     if (sudahAda) {
-      System.out.println("\n===== Nomor Rekening Sudah Digunakan =====");
+      System.out.println("\n==== Nomor Rekening Sudah Digunakan =====");
 
       enterUntukMelanjutkan();
 
@@ -143,7 +143,49 @@ public class Bank {
   }
 
   static boolean pilihJenisTabungan() {
-    return false;
+    int indexNasabah;
+    int jenisTabungan;
+    int nomorRekening;
+
+    System.out.print("===== MENU PILIH JENIS TABUNGAN =====\n");
+    System.out.print("Masukan nomor rekening: ");
+    nomorRekening = input.nextInt();
+
+    input.nextLine();
+
+    // cek jika sudah terdapat nomor rekening ini
+    indexNasabah = cariDataNasabah(nomorRekening);
+
+    if (indexNasabah == -1) {
+      System.out.println("\n===== Nomor Rekening Tidak Ditemukan =====");
+
+      enterUntukMelanjutkan();
+
+      return false;
+    }
+
+    System.out.println("0 = Tabungan Kimchi (tf limit Rp. 5.000.000)");
+    System.out.println("1 = Tabungan Kimbab (tf limit Rp. 20.000.000)");
+
+    System.out.print("Masukan Jenis Tabungan: ");
+    jenisTabungan = input.nextInt();
+    input.nextLine();
+    
+    if (jenisTabungan == 0 || jenisTabungan == 1) {
+      dataNasabah[indexNasabah][2] = jenisTabungan;
+
+      System.out.println("\n=====Jenis Tabungan Berhasil Diubah====");
+
+      enterUntukMelanjutkan();
+
+      return true;
+    } else {
+      System.out.print("\n=====Jenis Tabungan Tidak Ditemukan====");
+
+      enterUntukMelanjutkan();
+
+      return false;
+    }
   }
 
   static int checkSaldo() {
@@ -255,8 +297,9 @@ public class Bank {
       return false;
     }
 
-    if (nominalTransfer > limitTransfer[dataNasabah[indexRekeningTujuan][2]]) {
+    if (nominalTransfer > limitTransfer[dataNasabah[indexRekeningAsal][2]]) {
       System.out.println("Nominal transfer melebihi limit transfer");
+      System.out.println("Jenis Tabungan: " + jenisTabungan[dataNasabah[indexRekeningAsal][2]]);
 
       enterUntukMelanjutkan();
 
