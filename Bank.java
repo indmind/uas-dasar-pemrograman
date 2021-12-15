@@ -330,7 +330,7 @@ public class Bank {
 
       System.out.println("===== SELAMAT DATANG =====\n");
       System.out.println("Silahkan pilih menu yang tersedia");
-      System.out.println("1. Daftar Nasabah");
+      System.out.println("1. Pendaftaran Nasabah");
       System.out.println("2. Lihat Data Nasabah");
       System.out.println("3. Pilih Jenis Tabungan");
       System.out.println("4. Cek Saldo");
