@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class Bank {
@@ -19,6 +20,35 @@ public class Bank {
   static int[] limitTransfer = {
       5000000,
       20000000
+  };
+
+  static String[] daftarHadiah = {
+      "Mobil",
+      "Motor",
+      "Sepeda",
+      "Payung",
+      "Karpet",
+      "Kaos",
+      "Kemeja",
+      "Baju",
+      "Celana",
+      "Topi",
+      "Jaket",
+      "Sepatu",
+      "Bus",
+      "Kereta",
+      "Tiket bus",
+      "Tiket kereta",
+      "Tiket pesawat",
+      "Kapal",
+      "Kapal perahu",
+      "Kapal laut",
+      "Umroh",
+      "Hotel",
+      "Haji",
+      "Kambing",
+      "Kuda",
+      "Sapi"
   };
 
   static int indexNasabahTerakhir() {
@@ -170,7 +200,7 @@ public class Bank {
     System.out.print("Masukan Jenis Tabungan: ");
     jenisTabungan = input.nextInt();
     input.nextLine();
-    
+
     if (jenisTabungan == 0 || jenisTabungan == 1) {
       dataNasabah[indexNasabah][2] = jenisTabungan;
 
@@ -188,8 +218,43 @@ public class Bank {
     }
   }
 
-  static int checkSaldo() {
-    return 0;
+  static int cekSaldo() {
+    int saldoTotal;
+    int indexNasabah;
+    int nomorRekening;
+
+    System.out.print("===== MENU CEK SALDO =====\n");
+    System.out.print("Masukan nomor rekening: ");
+    nomorRekening = input.nextInt();
+
+    input.nextLine();
+
+    // cek jika sudah terdapat nomor rekening ini
+    indexNasabah = cariDataNasabah(nomorRekening);
+
+    if (indexNasabah == -1) {
+      System.out.println("\n===== Nomor Rekening Tidak Ditemukan =====");
+
+      enterUntukMelanjutkan();
+
+      return 0;
+    }
+
+    saldoTotal = dataNasabah[indexNasabah][1];
+
+    if (saldoTotal > 0) {
+      System.out.println("\n===== Sisa Saldo Anda " + saldoTotal + "=====");
+
+      enterUntukMelanjutkan();
+
+      return saldoTotal;
+    } else {
+      System.out.print("\n===== Saldo Anda Habis =====");
+
+      enterUntukMelanjutkan();
+
+      return saldoTotal;
+    }
   }
 
   static boolean setorTabungan() {
@@ -234,7 +299,40 @@ public class Bank {
   }
 
   static boolean ambilTabungan() {
-    return false;
+    int nomorRekening, indexNasabah, jumlahAmbilTabungan;
+
+    System.out.print("===== MENU AMBIL TABUNGAN =====\n");
+    System.out.print("Masukkan nomor rekening nasabah: ");
+    nomorRekening = input.nextInt();
+    input.nextLine();
+    indexNasabah = cariDataNasabah(nomorRekening);
+
+    if (indexNasabah == -1) {
+      System.out.println("Nomor rekening nasabah tidak ditemukan");
+
+      enterUntukMelanjutkan();
+
+      return false;
+    }
+
+    System.out.print("Masukkan jumlah ambil: ");
+    jumlahAmbilTabungan = input.nextInt();
+    input.nextLine();
+
+    if (dataNasabah[indexNasabah][1] < jumlahAmbilTabungan) {
+      System.out.println("Saldo anda tidak cukup");
+      enterUntukMelanjutkan();
+      return false;
+    }
+    dataNasabah[indexNasabah][1] -= jumlahAmbilTabungan;
+
+    tambahkanTransaksi(indexNasabah, "Ambil Tabungan -Rp. " + jumlahAmbilTabungan);
+
+    System.out.println("\n===== Ambil tabungan berhasil =====");
+
+    enterUntukMelanjutkan();
+
+    return true;
   }
 
   static boolean transfer() {
@@ -359,7 +457,86 @@ public class Bank {
   }
 
   static boolean donasi() {
-    return false;
+    int saldoTotal;
+    int indexNasabah;
+    int nomorRekening;
+
+    System.out.print("===== MENU DONASI =====\n");
+    System.out.print("Masukan nomor rekening: ");
+    nomorRekening = input.nextInt();
+    input.nextLine();
+
+    // cek jika sudah terdapat nomor rekening ini
+    indexNasabah = cariDataNasabah(nomorRekening);
+
+    if (indexNasabah == -1) {
+      System.out.println("\n===== Nomor Rekening Tidak Ditemukan =====");
+
+      enterUntukMelanjutkan();
+
+      return false;
+    }
+
+    System.out.print("Masukan Jumlah Donasi: ");
+    int jumlahDonasi = input.nextInt();
+    input.nextLine();
+
+    saldoTotal = dataNasabah[indexNasabah][1];
+
+    if (jumlahDonasi <= saldoTotal) {
+
+      dataNasabah[indexNasabah][1] -= jumlahDonasi;
+
+      saldoTotal = dataNasabah[indexNasabah][1];
+
+      System.out.println("\n===== Berhasil Donasi Sisa Saldo Anda " + saldoTotal + " =====");
+
+      enterUntukMelanjutkan();
+
+      tambahkanTransaksi(indexNasabah, "Donasi sejumlah -Rp. " + jumlahDonasi);
+
+      return true;
+    } else {
+      System.out.print("\n===== Saldo Anda Tidak Mencukupi =====");
+
+      enterUntukMelanjutkan();
+
+      return false;
+    }
+  }
+
+  static void undiHadiah() {
+    if(indexNasabahTerakhir() == -1) {
+      System.out.println("\n===== Tidak Ada Nasabah Yang Terdaftar =====");
+
+      enterUntukMelanjutkan();
+
+      return;
+    }
+
+    System.out.print("\n===== Undian Hadiah Bulan ini =====\n");
+
+    enterUntukMelanjutkan();
+
+    Random random = new Random();
+
+    int indexNasabah = random.nextInt(0, indexNasabahTerakhir() + 1);
+    int indexHadiah = random.nextInt(0, daftarHadiah.length);    
+
+    int nomorRekening = dataNasabah[indexNasabah][0];
+    String nama = namaNasabah[indexNasabah];
+
+    String hadiah = daftarHadiah[indexHadiah];
+
+    System.out.println("\n===== Selamat Kepada!! =====");
+    System.out.println("Nomor Rekening\t: " + nomorRekening);
+    System.out.println("Nama\t\t: " + nama);
+
+    System.out.println("\n\n===== Hadiah Yang Didapatkan =====");
+    System.out.println("\n\n" + hadiah + "\n\n");
+    System.out.println("==================================");
+
+    enterUntukMelanjutkan();
   }
 
   public static void main(String[] args) {
@@ -379,11 +556,13 @@ public class Bank {
       System.out.println("7. Transfer");
       System.out.println("8. Cetak Laporan Transaksi");
       System.out.println("9. Donasi");
-      System.out.println("10. Keluar");
+      System.out.println("10. Undi Hadiah Bulanan");
+      System.out.println("11. Keluar");
       System.out.println("\n===========================\n");
 
       System.out.print("Masukkan pilihan anda: ");
       pilihan = input.nextInt();
+      input.nextLine();
 
       clearConsole();
 
@@ -398,7 +577,7 @@ public class Bank {
           pilihJenisTabungan();
           break;
         case 4:
-          checkSaldo();
+          cekSaldo();
           break;
         case 5:
           setorTabungan();
@@ -416,6 +595,9 @@ public class Bank {
           donasi();
           break;
         case 10:
+          undiHadiah();
+          break;
+        case 11:
           System.out.println("Terima kasih telah menggunakan aplikasi ini");
           break;
         default:
@@ -423,6 +605,6 @@ public class Bank {
       }
 
       System.out.println();
-    } while (pilihan != 10);
+    } while (pilihan != 11);
   }
 }
