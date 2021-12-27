@@ -71,10 +71,10 @@ public class Bank {
     input.nextLine();
   }
 
-  static int tambahkanTransaksi(int indexNasabah, String transaksi) {
+  static int tambahkanHistory(int indexNasabah, String transaksi) {
     int indexTransaksi = 0;
 
-    for (int i = 0; i < dataTransaksi.length; i++) {
+    for (int i = 0; i < dataTransaksi[0].length; i++) {
       if (dataTransaksi[indexNasabah][i] == null) {
         indexTransaksi = i;
         break;
@@ -99,7 +99,6 @@ public class Bank {
 
     input.nextLine();
 
-    // cek jika sudah terdapat nomor rekening ini
     sudahAda = cariDataNasabah(nomorRekening) != -1;
 
     if (sudahAda) {
@@ -160,6 +159,7 @@ public class Bank {
     if (indexNasabah == -1) {
       System.out.println("Nomor rekening nasabah tidak ditemukan");
     } else {
+
       System.out.println("======= LIHAT DATA NASABAH =======");
       System.out.println("Nama nasabah\t\t: " + namaNasabah[indexNasabah]);
       System.out
@@ -173,6 +173,7 @@ public class Bank {
   }
 
   static boolean pilihJenisTabungan() {
+
     int indexNasabah;
     int jenisTabungan;
     int nomorRekening;
@@ -183,7 +184,6 @@ public class Bank {
 
     input.nextLine();
 
-    // cek jika sudah terdapat nomor rekening ini
     indexNasabah = cariDataNasabah(nomorRekening);
 
     if (indexNasabah == -1) {
@@ -202,6 +202,7 @@ public class Bank {
     input.nextLine();
 
     if (jenisTabungan == 0 || jenisTabungan == 1) {
+
       dataNasabah[indexNasabah][2] = jenisTabungan;
 
       System.out.println("\n=====Jenis Tabungan Berhasil Diubah====");
@@ -210,6 +211,7 @@ public class Bank {
 
       return true;
     } else {
+
       System.out.print("\n=====Jenis Tabungan Tidak Ditemukan====");
 
       enterUntukMelanjutkan();
@@ -229,7 +231,6 @@ public class Bank {
 
     input.nextLine();
 
-    // cek jika sudah terdapat nomor rekening ini
     indexNasabah = cariDataNasabah(nomorRekening);
 
     if (indexNasabah == -1) {
@@ -289,7 +290,7 @@ public class Bank {
 
     dataNasabah[indexNasabah][1] += jumlahSetoran;
 
-    tambahkanTransaksi(indexNasabah, "Setoran +Rp. " + jumlahSetoran);
+    tambahkanHistory(indexNasabah, "Setoran +Rp. " + jumlahSetoran);
 
     System.out.println("\n===== Setoran tabungan berhasil =====");
 
@@ -326,7 +327,7 @@ public class Bank {
     }
     dataNasabah[indexNasabah][1] -= jumlahAmbilTabungan;
 
-    tambahkanTransaksi(indexNasabah, "Ambil Tabungan -Rp. " + jumlahAmbilTabungan);
+    tambahkanHistory(indexNasabah, "Ambil Tabungan -Rp. " + jumlahAmbilTabungan);
 
     System.out.println("\n===== Ambil tabungan berhasil =====");
 
@@ -407,8 +408,8 @@ public class Bank {
     dataNasabah[indexRekeningAsal][1] -= nominalTransfer;
     dataNasabah[indexRekeningTujuan][1] += nominalTransfer;
 
-    tambahkanTransaksi(indexRekeningAsal, "Transfer ke " + rekeningTujuan + " -Rp. " + nominalTransfer);
-    tambahkanTransaksi(indexRekeningTujuan, "Transfer dari " + rekeningAsal + " +Rp. " + nominalTransfer);
+    tambahkanHistory(indexRekeningAsal, "Transfer ke " + rekeningTujuan + " -Rp. " + nominalTransfer);
+    tambahkanHistory(indexRekeningTujuan, "Transfer dari " + rekeningAsal + " +Rp. " + nominalTransfer);
 
     System.out.println("\n===== Bukti Transfer =====");
     System.out.printf("Nomor rekening asal\t: %d (%s)\n", rekeningAsal, namaNasabah[indexRekeningAsal]);
@@ -466,7 +467,6 @@ public class Bank {
     nomorRekening = input.nextInt();
     input.nextLine();
 
-    // cek jika sudah terdapat nomor rekening ini
     indexNasabah = cariDataNasabah(nomorRekening);
 
     if (indexNasabah == -1) {
@@ -493,7 +493,7 @@ public class Bank {
 
       enterUntukMelanjutkan();
 
-      tambahkanTransaksi(indexNasabah, "Donasi sejumlah -Rp. " + jumlahDonasi);
+      tambahkanHistory(indexNasabah, "Donasi sejumlah -Rp. " + jumlahDonasi);
 
       return true;
     } else {
@@ -506,7 +506,20 @@ public class Bank {
   }
 
   static void undiHadiah() {
-    if(indexNasabahTerakhir() == -1) {
+    int indexNasabahTerakhir;
+
+    int indexNasabah;
+    int indexHadiah;
+
+    int nomorRekening;
+    String nama;
+    String hadiah;
+
+    Random random = new Random();
+
+    indexNasabahTerakhir = indexNasabahTerakhir();
+
+    if (indexNasabahTerakhir == -1) {
       System.out.println("\n===== Tidak Ada Nasabah Yang Terdaftar =====");
 
       enterUntukMelanjutkan();
@@ -518,15 +531,12 @@ public class Bank {
 
     enterUntukMelanjutkan();
 
-    Random random = new Random();
+    indexNasabah = random.nextInt(indexNasabahTerakhir + 1);
+    indexHadiah = random.nextInt(daftarHadiah.length);
 
-    int indexNasabah = random.nextInt(0, indexNasabahTerakhir() + 1);
-    int indexHadiah = random.nextInt(0, daftarHadiah.length);    
-
-    int nomorRekening = dataNasabah[indexNasabah][0];
-    String nama = namaNasabah[indexNasabah];
-
-    String hadiah = daftarHadiah[indexHadiah];
+    nomorRekening = dataNasabah[indexNasabah][0];
+    nama = namaNasabah[indexNasabah];
+    hadiah = daftarHadiah[indexHadiah];
 
     System.out.println("\n===== Selamat Kepada!! =====");
     System.out.println("Nomor Rekening\t: " + nomorRekening);
